@@ -1,5 +1,7 @@
 var https = require('https');
 var qs = require('querystring');
+// var Friend = require('../models/FriendModel');
+var Device = require('../models/DeviceModel');
 
 exports.getFriends = function(req, res) {
     var userId = req.query.user_id;
@@ -19,9 +21,36 @@ exports.getFriends = function(req, res) {
         });
     });
 
-    friends.on('error', function(someshit) {
-        console.error(someshit);
+    friends.on('error', console.error);
+};
+
+exports.getSingleFriend = function(req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
+
+    var id = req.params.id.toString();
+
+    var singleFriend = https.get( 'https://api.venmo.com/v1/users/' + id, function(data) {
+        var json = '';
+        data.on('data', function(d) {
+            json += d;
+        });
+
+        data.on('end', function() {
+            fetchDevices(json);
+        });
     });
+
+    singleFriend.on('error', console.error);
+
+    var fetchDevices = function(json) {
+        Device.find({ owner: id }, function(err, arr){
+            json = JSON.parse(json).data;
+            json.devices = arr;
+            json = JSON.stringify(json);
+            res.send(json);
+        });
+    };
+
 };
 
 // exports.payFriend = function(req, res) {

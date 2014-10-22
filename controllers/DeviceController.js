@@ -3,11 +3,31 @@ var qs = require('querystring');
 var Device = require('../models/DeviceModel');
 
 exports.getDevices = function(req, res) {
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header({
+        "Access-Control-Allow-Origin": "*",
+        "": ""
+    });
 
     Device.find({}, function(err, obj){
         res.send(obj);
     });
+};
+
+exports.optionsDevice = function(req, res) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.send();
+};
+
+exports.postDevice = function(req, res) {
+    res.header('Access-Control-Allow-Origin', '*');
+    req.body.price = Number(req.body.price);
+    var device = new Device(req.body);
+    device.save(function(err) {
+        if (err) { return console.error(err); }
+    });
+    res.send();
 };
 
 exports.payDevice  = function(req, res) {

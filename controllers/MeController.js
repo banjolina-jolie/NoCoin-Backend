@@ -1,4 +1,5 @@
 var https = require('https');
+var Device = require('../models/DeviceModel');
 
 exports.getMe = function(req, res){
     var venmo;
@@ -14,7 +15,25 @@ exports.getMe = function(req, res){
         });
 
         data.on('end', function() {
-            res.send(json);
+            json = JSON.parse(json);
+            fetchDevices(json);
         });
     });
+
+    var fetchDevices = function(json) {
+        if (!json.data) {
+            return console.error(json);
+        }
+
+        var id = json.data.user.id;
+
+        Device.find({ owner: id }, function(err, arr){
+            json.devices = arr;
+            json = JSON.stringify(json);
+            res.send(json);
+        });
+
+    };
+
+    venmo.on('error', console.error);
 };

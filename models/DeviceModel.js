@@ -2,7 +2,9 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var DeviceSchema = new Schema({
-  owner   : String
+    name: String,
+    owner: String,
+    price: Number
 });
 
 module.exports = mongoose.model('Device', DeviceSchema);
