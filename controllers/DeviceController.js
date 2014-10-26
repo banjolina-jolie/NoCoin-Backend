@@ -2,11 +2,15 @@ var https = require('https');
 var qs = require('querystring');
 var Device = require('../models/DeviceModel');
 
-exports.getDevices = function(req, res) {
-    res.header({
-        "Access-Control-Allow-Origin": "*",
-        "": ""
+exports.getSingleDevice = function(req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
+    Device.findById(req.params.id, function(err, obj) {
+        res.send(obj);
     });
+};
+
+exports.getDevices = function(req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
 
     Device.find({}, function(err, obj){
         res.send(obj);
@@ -33,13 +37,10 @@ exports.postDevice = function(req, res) {
 exports.payDevice  = function(req, res) {
     res.header("Access-Control-Allow-Origin", "*");
 
-    var userId = req.query.user_id;
-    var accessToken = req.query.access_token;
-
     var params = {
-        access_token: accessToken,
-        user_id: userId,
-        note: 'Oh bonjour $$',
+        access_token: req.body.access_token,
+        user_id: req.body.user_id,
+        note: 'test payment',
         amount: 0.01,
         audience: 'public'
     };
