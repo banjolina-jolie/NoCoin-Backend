@@ -13,11 +13,11 @@ var app = express();
 // Middleware
 app.use(bodyParser());
 // Routes
-app.get('/me', meController.getMe);
+app.get('/users/:id', meController.getMe);
+app.post('/me', meController.postMe);
 // app.get('/me/devices', meController.getMyDevices);
 app.get('/friends', friendsController.getFriends);
 app.get('/friends/:id', friendsController.getSingleFriend);
-// app.get('/payfriend', friendsController.payFriend);
 app.get('/devices/:id', deviceController.getSingleDevice);
 app.get('/devices', deviceController.getDevices);
 app.options('/devices', deviceController.optionsDevice);
