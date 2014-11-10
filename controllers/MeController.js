@@ -6,7 +6,12 @@ var User = require('../models/UserModel');
 
 var findOrCreateUser = function(obj, res) {
     var data = {};
-    data.venmo_id = obj.user.id.toString();
+    if (!obj.user) {
+        console.log(obj);
+        res.send('ya done fucked up');
+        return;
+    }
+    data.venmo_id = obj.user.id;
     User.findOne(data, function(err, out) {
         out = out || {};
 
@@ -21,17 +26,17 @@ var findOrCreateUser = function(obj, res) {
             });
             res.send(user);
         } else {
-            fetchDevices(out);
+            fetchDevices(out, res);
         }
     });
+};
 
-    var fetchDevices = function(me) {
-        Device.find({ owner: me.venmo_id }, function(err, arr){
-            me.devices = arr;
-            me = JSON.stringify(me);
-            res.send(me);
-        });
-    };
+var fetchDevices = function(me, res) {
+    Device.find({ owner: me.venmo_id }, function(err, arr){
+        me.devices = arr;
+        me = JSON.stringify(me);
+        res.send(me);
+    });
 };
 
 exports.postMe = function(req, res) {
@@ -72,22 +77,12 @@ exports.postMe = function(req, res) {
     venmo.end();
 };
 
-
 exports.getMe = function(req, res){
     res.header("Access-Control-Allow-Origin", "*");
 
     var id = req.params.id;
 
     User.findById(id, function(err, me) {
-        fetchDevices(me);
+        fetchDevices(me, res);
     });
-
-
-    var fetchDevices = function(me) {
-        Device.find({ owner: me.venmo_id }, function(err, arr){
-            me.devices = arr;
-            me = JSON.stringify(me);
-            res.send(me);
-        });
-    };
 };

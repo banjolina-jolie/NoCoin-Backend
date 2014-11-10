@@ -15,12 +15,13 @@ app.use(bodyParser());
 // Routes
 app.get('/users/:id', meController.getMe);
 app.post('/me', meController.postMe);
-// app.get('/me/devices', meController.getMyDevices);
 app.get('/friends', friendsController.getFriends);
-app.get('/friends/:id', friendsController.getSingleFriend);
 app.get('/devices/:id', deviceController.getSingleDevice);
+app.get('/friends/:id', friendsController.getSingleFriend);
 app.get('/devices', deviceController.getDevices);
 app.options('/devices', deviceController.optionsDevice);
+app.options('/devices/:id', deviceController.optionsDevice);
+app.put('/devices/:id', deviceController.putDevice);
 app.post('/devices', deviceController.postDevice);
 app.post('/paydevice', deviceController.payDevice);
 

@@ -24,8 +24,20 @@ exports.optionsDevice = function(req, res) {
     res.send();
 };
 
+exports.putDevice = function(req, res) {
+    res.header('Access-Control-Allow-Origin', '*');
+    // convert price to number
+    req.body.price = Number(req.body.price);
+    delete req.body._id;
+    var device = Device.findByIdAndUpdate(req.body.id, req.body, function(err) {
+        if (err) { return console.error(err); }
+        res.send(req.body);
+    });
+};
+
 exports.postDevice = function(req, res) {
     res.header('Access-Control-Allow-Origin', '*');
+    // convert price to number
     req.body.price = Number(req.body.price);
     var device = new Device(req.body);
     device.save(function(err) {

@@ -1,6 +1,5 @@
 var https = require('https');
 var qs = require('querystring');
-// var Friend = require('../models/FriendModel');
 var Device = require('../models/DeviceModel');
 
 exports.getFriends = function(req, res) {
@@ -14,7 +13,6 @@ exports.getFriends = function(req, res) {
         data.on('data', function(d) {
             json += d;
         });
-
 
         data.on('end', function() {
             res.send(json);
