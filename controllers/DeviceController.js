@@ -1,4 +1,5 @@
 var https = require('https');
+var http = require('http');
 var qs = require('querystring');
 var Device = require('../models/DeviceModel');
 
@@ -49,21 +50,21 @@ exports.postDevice = function(req, res) {
 exports.payDevice  = function(req, res) {
     res.header("Access-Control-Allow-Origin", "*");
 
-    var params = {
-        access_token: req.body.access_token,
-        user_id: req.body.user_id,
-        note: 'test payment',
-        amount: 0.01,
-        audience: 'public'
-    };
+    // var params = {
+    //     access_token: req.body.access_token,
+    //     user_id: req.body.user_id,
+    //     note: 'test payment',
+    //     amount: 0.01,
+    //     audience: 'public'
+    // };
 
-    params = qs.stringify(params);
+    // params = qs.stringify(params);
 
-    var options = {
-        hostname: 'api.venmo.com',
-        path: '/v1/payments?' + params,
-        method: 'POST'
-    };
+    // var options = {
+    //     hostname: 'api.venmo.com',
+    //     path: '/v1/payments?' + params,
+    //     method: 'POST'
+    // };
 
     // var payment = https.request(options, function(data) {
 
@@ -84,7 +85,38 @@ exports.payDevice  = function(req, res) {
     // payment.on('error', function(err) {
     //     console.error(err);
     // });
+    // console.log('sup');
 
-    // payment.end();
-    res.send(params, options);
+    // var options = {
+    //     hostname: '10.0.0.7:9000',
+    //     path: '/on',
+    //     method: 'POST'
+    // };
+
+    https.get('http://10.0.0.7:9000/on', function(yo) {
+        res.send();
+    });
+
+    // var activate = http.request(options, function(data) {
+
+    //     var json = '';
+    //     data.on('data', function(d) {
+    //         json += d;
+    //     });
+
+    //     data.on('end', function() {
+    //         res.send(json);
+    //     });
+
+    //     data.on('error', function() {
+    //         console.error(arguments);
+    //     });
+    // });
+
+    // activate.on('error', function(err) {
+    //     console.error(err);
+    // });
+
+    // activate.end();
+    // res.send(params, options);
 };
